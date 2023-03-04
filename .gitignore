@@ -1,0 +1,14 @@
+target/*
+target/**/*
+
+.idea/*
+.idea/**/*
+
+.idea/**/gradle.xml
+.idea/**/libraries
+
+*.iml
+*.ipr
+*.iws
+
+
