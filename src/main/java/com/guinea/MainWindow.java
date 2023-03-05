@@ -75,7 +75,7 @@ public class MainWindow extends JFrame implements KeyListener {
                 int changeType = random.nextInt(20);
                 if ((changeType == 11) && (MatrixUtils.distance(snake.getSection(0).getX(),snake.getSection(0).getY(),appleX,appleY) > 2)) snake.setType(SnakeType.FAT);
                 else if (changeType == 4) snake.setType(SnakeType.EVIL);
-                else if (changeType >= 12 && !(((snake.getSection(0).getX() >= 7) || (snake.getSection(0).getX() <= 2)) ||
+                else if (changeType == 19 && !(((snake.getSection(0).getX() >= 7) || (snake.getSection(0).getX() <= 2)) ||
                         ((snake.getSection(0).getY() >= 7) || (snake.getSection(0).getY() <= 2)) && snake.getType().equals(SnakeType.RAM))) snake.setType(SnakeType.RAM);
                 else if (!snake.getType().equals(SnakeType.RAM)){
                     snake.setType(SnakeType.NORMAL);
@@ -83,7 +83,7 @@ public class MainWindow extends JFrame implements KeyListener {
                 }
 
                 snakeMoveDelaySnapshot = snakeMoveDelay;
-                if (snake.getType().equals(SnakeType.RAM)) snakeMoveDelay = snakeMoveDelay / 2;
+                if (snake.getType().equals(SnakeType.RAM)) snakeMoveDelay = 250;
                 else snakeMoveDelay = snakeMoveDelay * 2;
             }
         };
