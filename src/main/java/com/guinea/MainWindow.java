@@ -39,7 +39,7 @@ public class MainWindow extends JFrame implements KeyListener {
     private final BufferedImage apple = ImageIO.read(new File("D:\\java-projects\\Snake\\src\\main\\resources\\apple.png"));
 
     MainWindow() throws IOException {
-        super("Snake");
+        super("Snake+");
         setSize(520, 550);
         requestFocus();
         setFocusable(true);
