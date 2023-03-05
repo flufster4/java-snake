@@ -1,0 +1,20 @@
+{
+  "normal_messages": [
+    "Walls arnt your friends!",
+    "Biting yourself must hurt!",
+    "Hitting you head against yourself?",
+    "The wall hurts!",
+    "Walls are NOT soft!"
+  ],
+  "fat_messages":[
+    "You ate a little to much...",
+    "Green = NOT wanting apples",
+    "You over ate!",
+    "Don't eat if you are green!"
+  ],
+  "evil_messages": [
+    "Evil snakes to the opposite!",
+    "Left = right and up = down!",
+    "Some snakes hate directions!"
+  ]
+}
