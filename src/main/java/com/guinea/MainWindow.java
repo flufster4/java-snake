@@ -177,6 +177,7 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
             }
         }
 
+
         if (isDead) {
             gameloopTimer.cancel();
 
