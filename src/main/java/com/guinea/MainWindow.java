@@ -35,6 +35,7 @@ public class MainWindow extends JFrame implements KeyListener {
     private final BufferedImage normalHead = ImageIO.read(new File("D:\\java-projects\\Snake\\src\\main\\resources\\snake\\flushed.png"));
     private final BufferedImage fatHead = ImageIO.read(new File("D:\\java-projects\\Snake\\src\\main\\resources\\snake\\fat.png"));
     private final BufferedImage evilHead = ImageIO.read(new File("D:\\java-projects\\Snake\\src\\main\\resources\\snake\\evil.png"));
+    private final BufferedImage madHead = ImageIO.read(new File("D:\\java-projects\\Snake\\src\\main\\resources\\snake\\mad.png"));
     private final BufferedImage apple = ImageIO.read(new File("D:\\java-projects\\Snake\\src\\main\\resources\\apple.png"));
 
     MainWindow() throws IOException {
@@ -71,16 +72,19 @@ public class MainWindow extends JFrame implements KeyListener {
         TimerTask snakeBgTask = new TimerTask() {
             @Override
             public void run() {
-                int changeType = random.nextInt(15);
+                int changeType = random.nextInt(20);
                 if ((changeType == 11) && (MatrixUtils.distance(snake.getSection(0).getX(),snake.getSection(0).getY(),appleX,appleY) > 2)) snake.setType(SnakeType.FAT);
                 else if (changeType == 4) snake.setType(SnakeType.EVIL);
-                else {
+                else if (changeType >= 12 && !(((snake.getSection(0).getX() >= 7) || (snake.getSection(0).getX() <= 2)) ||
+                        ((snake.getSection(0).getY() >= 7) || (snake.getSection(0).getY() <= 2)) && snake.getType().equals(SnakeType.RAM))) snake.setType(SnakeType.RAM);
+                else if (!snake.getType().equals(SnakeType.RAM)){
                     snake.setType(SnakeType.NORMAL);
                     snakeMoveDelay = snakeMoveDelaySnapshot;
                 }
 
                 snakeMoveDelaySnapshot = snakeMoveDelay;
-                snakeMoveDelay = snakeMoveDelay * 2;
+                if (snake.getType().equals(SnakeType.RAM)) snakeMoveDelay = snakeMoveDelay / 2;
+                else snakeMoveDelay = snakeMoveDelay * 2;
             }
         };
 
@@ -136,6 +140,9 @@ public class MainWindow extends JFrame implements KeyListener {
                     break;
                 case FAT:
                     g1.setColor(GameColors.snakeGreen);
+                    break;
+                case RAM:
+                    g1.setColor(GameColors.snakeRed);
             }
             g1.fillRoundRect(x,y,scale,scale,10,10);
         };
@@ -153,6 +160,9 @@ public class MainWindow extends JFrame implements KeyListener {
                     break;
                 case EVIL:
                     g1.drawImage(evilHead,x,y,this);
+                    break;
+                case RAM:
+                    g1.drawImage(madHead, x, y, this);
             }
         };
 
@@ -187,8 +197,15 @@ public class MainWindow extends JFrame implements KeyListener {
         //check if player ate apple
         if ((snake.getSection(0).getX() == appleX) && (snake.getSection(0).getY() == appleY)) {
             if (snake.getType().equals(SnakeType.FAT)) die();
+            else if (snake.getType().equals(SnakeType.RAM)) snake.setType(SnakeType.NORMAL);
             removeTail = false;
             generateApple();
+        }
+
+        //ram snake
+        if (((snake.getSection(0).getX() >= 7) || (snake.getSection(0).getX() <= 2)) ||
+                ((snake.getSection(0).getY() >= 7) || (snake.getSection(0).getY() <= 2)) && snake.getType().equals(SnakeType.RAM)) {
+            snake.setType(SnakeType.NORMAL);
         }
 
         //die
@@ -210,12 +227,15 @@ public class MainWindow extends JFrame implements KeyListener {
         //move snake
         snake.addSection(moveIn, removeTail);
 
-        System.out.println(snake.getSection(0).getY());
-
         //update game board
         for (int i = 0; i < snake.getLength()-1; i++) {
             if (snake.getSection(i).isHead()) {
-                gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] = 3;
+                try {
+                    gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] = 3;
+                } catch (IndexOutOfBoundsException e) {
+                    die();
+                    return;
+                }
             } else {
                 gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] = 2;
             }
@@ -261,7 +281,7 @@ public class MainWindow extends JFrame implements KeyListener {
                 case KeyEvent.VK_RIGHT:
                     if (!moveIn.equals(Direction.RIGHT)) moveIn = Direction.LEFT;
             }
-        else
+        else if (!snake.getType().equals(SnakeType.RAM))
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     if (!moveIn.equals(Direction.DOWN)) moveIn = Direction.UP;

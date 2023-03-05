@@ -4,5 +4,6 @@ public enum SnakeType {
 
     NORMAL,
     EVIL,
-    FAT
+    FAT,
+    RAM
 }
