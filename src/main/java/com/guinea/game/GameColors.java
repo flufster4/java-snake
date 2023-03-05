@@ -8,5 +8,6 @@ public class GameColors {
     public final static Color snakePurple = new Color(171, 143, 215);
     public final static Color snakeGreen = new Color(120, 179, 84);
     public final static Color bgGray = new Color(47, 43, 43);
+    public final static Color snakeRed = new Color(219, 43, 69);
 
 }

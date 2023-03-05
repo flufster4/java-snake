@@ -1,10 +1,9 @@
 package com.guinea.game.snake;
 
+import com.guinea.game.Cordinates;
 import com.guinea.game.Direction;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Snake {
 
@@ -31,34 +30,18 @@ public class Snake {
 
     public void addSection(Direction moving, boolean removeTail) {
         //calculate new head x and y
-        if (type == SnakeType.EVIL) {
-            switch (snakeSections.getFirst().getFacing()) {
-                case RIGHT:
-                    this.x -= 1;
-                    break;
-                case LEFT:
-                    this.x += 1;
-                    break;
-                case UP:
-                    this.y += 1;
-                    break;
-                case DOWN:
-                    this.y -= 1;
-            }
-        } else {
-            switch (snakeSections.getFirst().getFacing()) {
-                case RIGHT:
-                    this.x += 1;
-                    break;
-                case LEFT:
-                    this.x -= 1;
-                    break;
-                case UP:
-                    this.y -= 1;
-                    break;
-                case DOWN:
-                    this.y += 1;
-            }
+        switch (snakeSections.getFirst().getFacing()) {
+            case RIGHT:
+                this.x += 1;
+                break;
+            case LEFT:
+                this.x -= 1;
+                break;
+            case UP:
+                this.y -= 1;
+                break;
+            case DOWN:
+                this.y += 1;
         }
 
         snakeSections.getFirst().setHead(false);
@@ -67,6 +50,46 @@ public class Snake {
             snakeSections.removeLast();
             snakeSections.getLast().setTail(true);
         }
+
+    }
+
+    public Cordinates getNextCords(Direction direction) {
+
+        int x = this.x;
+        int y = this.y;
+
+        switch (direction) {
+            case RIGHT:
+                x += 1;
+                break;
+            case LEFT:
+                x -= 1;
+                break;
+            case UP:
+                y -= 1;
+                break;
+            case DOWN:
+                y += 1;
+        }
+
+        int finalX = x;
+        int finalY = y;
+        return new Cordinates() {
+            @Override
+            public int getX() {
+                return finalX;
+            }
+
+            @Override
+            public int getY() {
+                return finalY;
+            }
+
+            @Override
+            public String toString() {
+                return "Cordinates [" + finalX + "," + finalY + "]";
+            }
+        };
 
     }
 
