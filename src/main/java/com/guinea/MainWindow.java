@@ -79,10 +79,11 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
         TimerTask abilityTask = new TimerTask() {
             @Override
             public void run() {
-                int num = random.nextInt(10);
+                int num = random.nextInt(15);
                 if (num == 2 && MatrixUtils.distance(snake.getSection(0).getX(),snake.getSection(0).getY(),appleX,appleY) > 2) snake.setType(SnakeType.FAT);
                 if (num == 7 && snake.getSection(0).getX() > 0 && snake.getSection(0).getY() > 0 && snake.getSection(0).getX() < 9 && snake.getSection(0).getY() < 9) snake.setType(SnakeType.EVIL);
-                else snake.setType(SnakeType.NORMAL);
+                if (num == 14) snake.setType(SnakeType.RAM);
+                if (!snake.getType().equals(SnakeType.RAM)) snake.setType(SnakeType.NORMAL);
             }
         };
 
@@ -230,8 +231,8 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
                 }
 
                 //ram snake
-                if (((snake.getSection(0).getX() >= 7) || (snake.getSection(0).getX() <= 2)) ||
-                        ((snake.getSection(0).getY() >= 7) || (snake.getSection(0).getY() <= 2)) && snake.getType().equals(SnakeType.RAM))
+                if (((snake.getSection(0).getX() >= 8) || (snake.getSection(0).getX() <= 1)) ||
+                        ((snake.getSection(0).getY() >= 8) || (snake.getSection(0).getY() <= 1)) && snake.getType().equals(SnakeType.RAM))
                             snake.setType(SnakeType.NORMAL);
 
 
