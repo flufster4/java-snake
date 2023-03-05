@@ -4,4 +4,5 @@ public interface Cordinates {
 
     int getX();
     int getY();
+
 }

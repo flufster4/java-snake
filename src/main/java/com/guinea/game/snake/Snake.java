@@ -84,7 +84,13 @@ public class Snake {
             public int getY() {
                 return finalY;
             }
+
+            @Override
+            public String toString() {
+                return "Cordinates [" + finalX + "," + finalY + "]";
+            }
         };
+
     }
 
     public int getLength() {
