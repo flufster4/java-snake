@@ -1,13 +1,11 @@
 package com.guinea;
 
-import com.guinea.game.Direction;
-import com.guinea.game.Drawable;
-import com.guinea.game.GameColors;
-import com.guinea.game.Grid;
+import com.guinea.game.*;
 import com.guinea.game.snake.Snake;
 import com.guinea.game.snake.SnakeType;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,14 +18,15 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainWindow extends Frame implements KeyListener {
+public class MainWindow extends JFrame implements KeyListener {
 
     public Timer gameloopTimer = new Timer("gameloop");
-    public int[][] gameBoardMatrix = new int[11][11];
+    public int[][] gameBoardMatrix = new int[10][10];
     private final Random random = new Random();
     public Snake snake = new Snake(5,5, SnakeType.NORMAL);
     private int appleX = 0;
     private int appleY = 0;
+    private boolean isDead = false;
 
     private int snakeMoveDelay = 500;
     private int snakeMoveDelaySnapshot = snakeMoveDelay;
@@ -39,11 +38,13 @@ public class MainWindow extends Frame implements KeyListener {
 
     MainWindow() throws IOException {
         super("Snake");
-        setSize(600, 600);
+        setSize(520, 550);
         requestFocus();
         setFocusable(true);
         addKeyListener(this);
+        setResizable(false);
         setVisible(true);
+        setIconImage(normalHead);
 
         //Properly exit window
         addWindowListener(new WindowAdapter() {
@@ -78,7 +79,7 @@ public class MainWindow extends Frame implements KeyListener {
                 }
 
                 snakeMoveDelaySnapshot = snakeMoveDelay;
-                snakeMoveDelay = 1000;
+                snakeMoveDelay = snakeMoveDelay * 2;
             }
         };
 
@@ -100,15 +101,11 @@ public class MainWindow extends Frame implements KeyListener {
     @Override
     public void paint(Graphics g) {
 
-        //draw outline
-        g.setColor(Color.GRAY);
-        g.drawLine(10,40,510,40);
-        g.drawLine(510,40,510,540);
-        g.drawLine(10,540,510,540);
-        g.drawLine(10,40,10,540);
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,600,600);
 
         //draw grid
-        Grid grid = new Grid(10,40,10,10,50, g);
+        Grid grid = new Grid(10,35,10,10,50, g);
 
         Drawable plainSquare = (scale, g1, x, y) -> {
             g1.setColor(Color.BLACK);
@@ -168,27 +165,58 @@ public class MainWindow extends Frame implements KeyListener {
                 } else grid.drawAt(i, j, plainSquare);
             }
         }
+
+        if(isDead) {
+            gameloopTimer.cancel();
+            g.setColor(new Color(36,33,32,127));
+            g.fillRect(0,0,600,600);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("",Font.BOLD,40));
+            g.drawString("GAME OVER", 140,275);
+            g.setFont(new Font("", Font.BOLD,20));
+            g.drawString("SCORE: "+(snake.getLength()-1),140,300);
+        }
     }
 
     public void updateSnake() {
+
+        boolean removeTail = true;
+
+        //check if player ate apple
+        if ((snake.getSection(0).getX() == appleX) && (snake.getSection(0).getY() == appleY)) {
+            if (snake.getType().equals(SnakeType.FAT)) die();
+            removeTail = false;
+            generateApple();
+        }
+
+        //die
+        try {
+            Cordinates nextCords = snake.getNextCords(moveIn);
+            if (gameBoardMatrix[nextCords.getX()][nextCords.getY()] == 2) {
+                die();
+                return;
+            }
+        } catch (IndexOutOfBoundsException e) {
+            die();
+            return;
+        }
+
+        //reset board
         resetMatrix();
         gameBoardMatrix[appleX][appleY] = 1;
 
-        snake.addSection(moveIn, true);
+        //move snake
+        snake.addSection(moveIn, removeTail);
+
         System.out.println(snake.getSection(0).getY());
 
+        //update game board
         for (int i = 0; i < snake.getLength()-1; i++) {
             if (snake.getSection(i).isHead()) {
                 gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] = 3;
             } else {
                 gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] = 2;
             }
-        }
-
-        if ((snake.getSection(0).getX() == appleX) && (snake.getSection(0).getY() == appleY)) {
-            if (snake.getType().equals(SnakeType.FAT)) die();
-            snake.addSection(moveIn, false);
-            generateApple();
         }
     }
 
@@ -208,8 +236,8 @@ public class MainWindow extends Frame implements KeyListener {
     }
 
     void die() {
-        System.out.println("Ur ded lol");
-        gameloopTimer.cancel();
+        System.out.println("you died!");
+        isDead = true;
     }
 
     @Override
@@ -217,19 +245,35 @@ public class MainWindow extends Frame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_W:
-                moveIn = Direction.UP;
-                break;
-            case KeyEvent.VK_S:
-                moveIn = Direction.DOWN;
-                break;
-            case KeyEvent.VK_A:
-                moveIn = Direction.LEFT;
-                break;
-            case KeyEvent.VK_D:
-                moveIn = Direction.RIGHT;
-        }
+        if (snake.getType().equals(SnakeType.EVIL))
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    if (!moveIn.equals(Direction.UP)) moveIn = Direction.DOWN;
+                    break;
+                case KeyEvent.VK_S:
+                    if (!moveIn.equals(Direction.DOWN)) moveIn = Direction.UP;
+                    break;
+                case KeyEvent.VK_A:
+                    if (!moveIn.equals(Direction.LEFT)) moveIn = Direction.RIGHT;
+                    break;
+                case KeyEvent.VK_D:
+                    if (!moveIn.equals(Direction.RIGHT)) moveIn = Direction.LEFT;
+            }
+        else
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    if (!moveIn.equals(Direction.DOWN)) moveIn = Direction.UP;
+                    break;
+                case KeyEvent.VK_S:
+                    if (!moveIn.equals(Direction.UP)) moveIn = Direction.DOWN;
+                    break;
+                case KeyEvent.VK_A:
+                    if (!moveIn.equals(Direction.RIGHT)) moveIn = Direction.LEFT;
+                    break;
+                case KeyEvent.VK_D:
+                    if (!moveIn.equals(Direction.LEFT)) moveIn = Direction.RIGHT;
+            }
+
     }
 
     @Override
