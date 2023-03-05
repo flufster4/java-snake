@@ -3,6 +3,7 @@ package com.guinea;
 import com.guinea.game.*;
 import com.guinea.game.snake.Snake;
 import com.guinea.game.snake.SnakeType;
+import com.guinea.geomatry.MatrixUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -71,7 +72,7 @@ public class MainWindow extends JFrame implements KeyListener {
             @Override
             public void run() {
                 int changeType = random.nextInt(15);
-                if (changeType == 11) snake.setType(SnakeType.FAT);
+                if ((changeType == 11) && (MatrixUtils.distance(snake.getSection(0).getX(),snake.getSection(0).getY(),appleX,appleY) > 2)) snake.setType(SnakeType.FAT);
                 else if (changeType == 4) snake.setType(SnakeType.EVIL);
                 else {
                     snake.setType(SnakeType.NORMAL);
@@ -83,6 +84,7 @@ public class MainWindow extends JFrame implements KeyListener {
             }
         };
 
+        generateApple();
         //schedule gameloop tasks
         gameloopTimer.schedule(updateTask, 100,100);
         gameloopTimer.schedule(snakeTask, snakeMoveDelay, snakeMoveDelay);
@@ -247,30 +249,30 @@ public class MainWindow extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (snake.getType().equals(SnakeType.EVIL))
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W:
+                case KeyEvent.VK_UP:
                     if (!moveIn.equals(Direction.UP)) moveIn = Direction.DOWN;
                     break;
-                case KeyEvent.VK_S:
+                case KeyEvent.VK_DOWN:
                     if (!moveIn.equals(Direction.DOWN)) moveIn = Direction.UP;
                     break;
-                case KeyEvent.VK_A:
+                case KeyEvent.VK_LEFT:
                     if (!moveIn.equals(Direction.LEFT)) moveIn = Direction.RIGHT;
                     break;
-                case KeyEvent.VK_D:
+                case KeyEvent.VK_RIGHT:
                     if (!moveIn.equals(Direction.RIGHT)) moveIn = Direction.LEFT;
             }
         else
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W:
+                case KeyEvent.VK_UP:
                     if (!moveIn.equals(Direction.DOWN)) moveIn = Direction.UP;
                     break;
-                case KeyEvent.VK_S:
+                case KeyEvent.VK_DOWN:
                     if (!moveIn.equals(Direction.UP)) moveIn = Direction.DOWN;
                     break;
-                case KeyEvent.VK_A:
+                case KeyEvent.VK_LEFT:
                     if (!moveIn.equals(Direction.RIGHT)) moveIn = Direction.LEFT;
                     break;
-                case KeyEvent.VK_D:
+                case KeyEvent.VK_RIGHT:
                     if (!moveIn.equals(Direction.LEFT)) moveIn = Direction.RIGHT;
             }
 

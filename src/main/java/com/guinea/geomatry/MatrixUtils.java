@@ -1,13 +1,8 @@
 package com.guinea.geomatry;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class MatrixUtils {
 
-    public static List toList(Object[] object) {
-        return Arrays.stream(object).collect(Collectors.toList());
+    public static int distance(int x1, int y1, int x2, int y2) {
+        return (int) Math.round(Math.sqrt(Math.pow(x2-x1, 2)+Math.pow(y2-y1,2)));
     }
-
 }
