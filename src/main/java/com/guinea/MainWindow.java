@@ -332,6 +332,7 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
                         break;
                 }
             if (isDead && e.getKeyCode() == KeyEvent.VK_ENTER) {
+                resetMatrix();
                 this.isDead = false;
                 generateApple();
                 this.gameloopTimer = new Timer("gameloop");

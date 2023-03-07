@@ -1,9 +1,10 @@
 package com.guinea.game.snake;
 
-import com.guinea.game.Cordinates;
 import com.guinea.game.Direction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class Snake {
 
@@ -50,46 +51,6 @@ public class Snake {
             snakeSections.removeLast();
             snakeSections.getLast().setTail(true);
         }
-
-    }
-
-    public Cordinates getNextCords(Direction direction) {
-
-        int x = this.x;
-        int y = this.y;
-
-        switch (direction) {
-            case RIGHT:
-                x += 1;
-                break;
-            case LEFT:
-                x -= 1;
-                break;
-            case UP:
-                y -= 1;
-                break;
-            case DOWN:
-                y += 1;
-        }
-
-        int finalX = x;
-        int finalY = y;
-        return new Cordinates() {
-            @Override
-            public int getX() {
-                return finalX;
-            }
-
-            @Override
-            public int getY() {
-                return finalY;
-            }
-
-            @Override
-            public String toString() {
-                return "Cordinates [" + finalX + "," + finalY + "]";
-            }
-        };
 
     }
 
