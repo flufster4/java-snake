@@ -51,7 +51,7 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
     Object msgJson = new JSONParser().parse(new FileReader("D:\\java-projects\\Snake\\src\\main\\resources\\deathmsg.json"));
     private String deathMessage;
 
-    MainWindow() throws IOException, ParseException {
+    public MainWindow() throws IOException, ParseException {
         super("Snake+");
         setSize(520, 550);
         requestFocus();
@@ -232,8 +232,8 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
                 }
 
                 //ram snake
-                if (((snake.getSection(0).getX() >= 8) || (snake.getSection(0).getX() <= 1)) ||
-                        ((snake.getSection(0).getY() >= 8) || (snake.getSection(0).getY() <= 1)) && snake.getType().equals(SnakeType.RAM))
+                if (((snake.getSection(0).getX() >= 7) || (snake.getSection(0).getX() <= 2)) ||
+                        ((snake.getSection(0).getY() >= 7) || (snake.getSection(0).getY() <= 2)) && snake.getType().equals(SnakeType.RAM))
                             snake.setType(SnakeType.NORMAL);
 
 
