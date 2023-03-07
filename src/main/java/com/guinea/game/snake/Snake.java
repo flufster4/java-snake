@@ -45,11 +45,11 @@ public class Snake {
                 this.y += 1;
         }
 
-        snakeSections.getFirst().setHead(false);
+        snakeSections.getFirst().isHead = false;
         snakeSections.addFirst(new SnakeSection(true, false, moving, this.x, this.y));
         if (removeTail) {
             snakeSections.removeLast();
-            snakeSections.getLast().setTail(true);
+            snakeSections.getLast().isTail = true;
         }
 
     }

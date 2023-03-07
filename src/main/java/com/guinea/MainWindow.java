@@ -239,7 +239,7 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
 
                 //die
                 for (int i = 0; i < snake.getLength() - 1; i++)
-                    if (snake.getSection(i).isHead())
+                    if (snake.getSection(i).isHead)
                         if (gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] == 2)
                             die("yourself");
 
@@ -252,7 +252,7 @@ public class MainWindow extends DoubleBuffer implements KeyListener {
 
                 //update game board
                 for (int i = 0; i < snake.getLength() - 1; i++)
-                    if (snake.getSection(i).isHead()) {
+                    if (snake.getSection(i).isHead) {
                         try {
                             gameBoardMatrix[snake.getSection(i).getX()][snake.getSection(i).getY()] = 3;
                         } catch (IndexOutOfBoundsException e) {

@@ -4,9 +4,9 @@ import com.guinea.game.Direction;
 
 public class SnakeSection {
 
-    private boolean isHead = false;
-    private boolean isTail = false;
-    private Direction facing;
+    public boolean isHead = false;
+    public boolean isTail = false;
+    private final Direction facing;
     private final int x;
     private final int y;
 
@@ -16,22 +16,6 @@ public class SnakeSection {
         this.facing = facing;
         this.x = x;
         this.y =y;
-    }
-
-    public boolean isHead() {
-        return isHead;
-    }
-
-    public void setHead(boolean isHead) {
-        this.isHead = isHead;
-    }
-
-    public boolean isTail() {
-        return isTail;
-    }
-
-    public void setTail(boolean isTail) {
-        this.isTail = isTail;
     }
 
     public Direction getFacing() {
